@@ -26,6 +26,7 @@ export type CatalogFilter = {
 }
 
 export type CatalogRequest = {
+  addon_id?: string
   catalog_id: string
   skip?: number
   limit?: number
@@ -33,6 +34,7 @@ export type CatalogRequest = {
 }
 
 export type SearchRequest = {
+  addon_id?: string
   query: string
   limit?: number
 }

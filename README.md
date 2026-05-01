@@ -1,11 +1,11 @@
-# Typenx Addon SDK
+# Typenx Addon TypeScript SDK
 
 TypeScript SDK for building Typenx metadata addons.
 
 Typenx addons are remote HTTP services. They provide catalog, search, and anime metadata only. They do not return stream URLs or host media.
 
 ```ts
-import { createTypenxAddon, serveTypenxAddon } from '@typenx/addon-sdk'
+import { createTypenxAddon, serveTypenxAddon } from '@typenx/addon-ts-sdk'
 
 const shows = [
   {
