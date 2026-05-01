@@ -12,5 +12,7 @@ export type {
   CatalogResponse,
   ContentType,
   EpisodeMetadata,
+  ExternalLink,
   SearchRequest,
+  StaffCredit,
 } from './types.js'
