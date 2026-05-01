@@ -4,9 +4,17 @@ import type { TypenxAddon } from './addon.js'
 export function serveTypenxAddon(addon: TypenxAddon, options: { port?: number } = {}) {
   const port = options.port ?? Number(process.env.PORT ?? 8787)
   const server = createServer(async (incoming, outgoing) => {
-    const request = await toRequest(incoming)
-    const response = await addon.fetch(request)
-    await writeResponse(outgoing, response)
+    try {
+      const request = await toRequest(incoming)
+      const response = await addon.fetch(request)
+      await writeResponse(outgoing, response)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Addon request failed'
+      await writeResponse(
+        outgoing,
+        Response.json({ message }, { status: 500 }),
+      )
+    }
   })
 
   return server.listen(port, () => {
