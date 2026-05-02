@@ -4,6 +4,8 @@ import type {
   AnimeMetadata,
   CatalogRequest,
   CatalogResponse,
+  RecommendationRequest,
+  RecommendationResponse,
   SearchRequest,
   VideoSourceRequest,
   VideoSourceResponse,
@@ -14,6 +16,7 @@ export type TypenxAddonHandlers = {
   catalog: (request: CatalogRequest) => MaybePromise<CatalogResponse>
   search: (request: SearchRequest) => MaybePromise<CatalogResponse>
   anime: (id: string) => MaybePromise<AnimeMetadata>
+  recommendations?: (request: RecommendationRequest) => MaybePromise<RecommendationResponse>
   videos?: (request: VideoSourceRequest) => MaybePromise<VideoSourceResponse>
 }
 
@@ -53,6 +56,13 @@ export function createTypenxAddon(options: {
       if (request.method === 'GET' && path.startsWith('/anime/')) {
         const id = decodeURIComponent(path.slice('/anime/'.length))
         return json(options.handlers.anime(id))
+      }
+
+      if (request.method === 'POST' && path === '/recommendations') {
+        if (!options.handlers.recommendations) {
+          return json({ message: 'Recommendations are not supported' }, 404)
+        }
+        return json(options.handlers.recommendations(await readJson<RecommendationRequest>(request)))
       }
 
       if (request.method === 'POST' && path === '/videos') {

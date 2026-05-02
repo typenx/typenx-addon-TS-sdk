@@ -4,6 +4,7 @@ export type AddonResource =
   | 'anime_meta'
   | 'episode_meta'
   | 'video_sources'
+  | 'recommendations'
 
 export type ContentType = 'anime' | 'movie' | 'ova' | 'ona' | 'special'
 
@@ -42,6 +43,30 @@ export type SearchRequest = {
   addon_id?: string
   query: string
   limit?: number
+}
+
+export type RecommendationSeed = {
+  anime_id: string
+  score?: number | null
+  weight?: number | null
+}
+
+export type RecommendationRequest = {
+  addon_id?: string
+  liked: RecommendationSeed[]
+  disliked?: RecommendationSeed[]
+  limit?: number
+  candidate_limit?: number
+  include_reasons?: boolean
+}
+
+export type RecommendationPreview = AnimePreview & {
+  recommendation_score: number
+  reasons?: string[]
+}
+
+export type RecommendationResponse = {
+  items: RecommendationPreview[]
 }
 
 export type VideoSourceRequest = {
