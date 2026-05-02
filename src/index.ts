@@ -1,5 +1,17 @@
 export { createTypenxAddon, json, type TypenxAddon, type TypenxAddonHandlers } from './addon.js'
 export { serveTypenxAddon } from './node.js'
+export {
+  baseShowTitle,
+  centralizeSeasons,
+  centralizedId,
+  centralizedIds,
+  combineAnimeSeasons,
+  isCentralizedId,
+  normalizeTitleKey,
+  seasonNumberOf,
+  type CentralizedAnimePreview,
+  type SeasonEntry,
+} from './seasons.js'
 export type {
   AddonHealth,
   AddonManifest,
