@@ -1,10 +1,18 @@
 # Typenx Addon TypeScript SDK
 
-TypeScript SDK for building Typenx addons.
+The TypeScript SDK for building Typenx addons.
 
-Typenx addons are remote HTTP services. Metadata addons provide catalog, search, and anime metadata. Video addons can also opt into `video_sources` and return episode stream URLs.
+Typenx addons are remote HTTP services with a typed schema. Metadata addons return catalogs, search results, and anime metadata. Video addons can additionally opt into the `video_sources` resource and return episode stream URLs they control. Once the service is running and registered, Typenx Core treats it as a first-class source — no rebuild, no plugin folder, no special deploy.
 
-Use this SDK when you want to plug a new provider, catalog, recommendation source, or user-controlled video library into Typenx. If you like addon-first self-hosted anime tools, star [typenx-core](https://github.com/typenx/typenx-core).
+This SDK gives you the manifest types, request/response types, an HTTP server, and a couple of helpers so you can stand up a working addon in one file.
+
+## Install
+
+```bash
+npm install @typenx/addon-ts-sdk
+```
+
+## A minimal addon
 
 ```ts
 import { createTypenxAddon, serveTypenxAddon } from '@typenx/addon-ts-sdk'
@@ -40,7 +48,7 @@ const addon = createTypenxAddon({
       id,
       title: "Frieren: Beyond Journey's End",
       original_title: 'Sousou no Frieren',
-      alternative_titles: ['Frieren: Beyond Journey's End'],
+      alternative_titles: ["Frieren: Beyond Journey's End"],
       synopsis: 'An elf mage retraces a former journey and learns what time leaves behind.',
       description: 'An elf mage retraces a former journey and learns what time leaves behind.',
       poster: shows[0].poster,
@@ -91,7 +99,9 @@ const addon = createTypenxAddon({
 serveTypenxAddon(addon)
 ```
 
-Routes exposed by the SDK:
+That's a complete addon. Run it, register the URL in [Typenx Core](https://github.com/typenx/typenx-core) via `TYPENX_DEFAULT_ADDONS` or the addon panel, and it shows up in catalogs and search.
+
+## Routes the SDK exposes
 
 - `GET /health`
 - `GET /manifest`
@@ -99,3 +109,12 @@ Routes exposed by the SDK:
 - `POST /search`
 - `GET /anime/:id`
 - `POST /videos`
+
+## What kinds of things to build
+
+- A bridge to a metadata source the official addons don't cover.
+- A private catalog backed by a personal collection.
+- A recommendation experiment that consumes signals from your AniList list.
+- A video source that resolves episode URLs from your own infrastructure.
+
+The SDKs in [Python](https://github.com/typenx/typenx-addon-python-sdk) and [Rust](https://github.com/typenx/typenx-addon-rust-sdk) speak the same protocol and interop cleanly with the TypeScript one.
