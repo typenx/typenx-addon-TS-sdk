@@ -4,6 +4,8 @@ import type {
   AnimeMetadata,
   CatalogRequest,
   CatalogResponse,
+  MangaPagesRequest,
+  MangaPagesResponse,
   RecommendationRequest,
   RecommendationResponse,
   SearchRequest,
@@ -19,6 +21,7 @@ export type TypenxAddonHandlers = {
   manga?: (id: string) => MaybePromise<AnimeMetadata>
   recommendations?: (request: RecommendationRequest) => MaybePromise<RecommendationResponse>
   videos?: (request: VideoSourceRequest) => MaybePromise<VideoSourceResponse>
+  mangaPages?: (request: MangaPagesRequest) => MaybePromise<MangaPagesResponse>
 }
 
 export type TypenxAddon = {
@@ -76,6 +79,13 @@ export function createTypenxAddon(options: {
           return json({ message: 'Video sources are not supported' }, 404)
         }
         return json(options.handlers.videos(await readJson<VideoSourceRequest>(request)))
+      }
+
+      if (request.method === 'POST' && path === '/manga/pages') {
+        if (!options.handlers.mangaPages) {
+          return json({ message: 'Manga pages are not supported' }, 404)
+        }
+        return json(options.handlers.mangaPages(await readJson<MangaPagesRequest>(request)))
       }
 
       return json({ message: 'Not found' }, 404)

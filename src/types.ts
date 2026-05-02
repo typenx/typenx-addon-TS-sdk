@@ -4,6 +4,7 @@ export type AddonResource =
   | 'anime_meta'
   | 'episode_meta'
   | 'video_sources'
+  | 'manga_pages'
   | 'recommendations'
 
 export type ContentType =
@@ -116,6 +117,30 @@ export type VideoSubtitle = {
   language?: string | null
   url: string
   format?: string | null
+}
+
+export type MangaPagesRequest = {
+  addon_id?: string
+  manga_id: string
+  manga_title?: string | null
+  chapter_id?: string | null
+  chapter_number?: number | null
+}
+
+export type MangaPagesResponse = {
+  manga_id: string
+  chapter_id?: string | null
+  chapter_number?: number | null
+  pages: MangaPageImage[]
+}
+
+export type MangaPageImage = {
+  index: number
+  url: string
+  width?: number | null
+  height?: number | null
+  mime_type?: string | null
+  headers: VideoHeader[]
 }
 
 export type CatalogResponse = {
