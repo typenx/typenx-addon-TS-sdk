@@ -16,6 +16,7 @@ export type TypenxAddonHandlers = {
   catalog: (request: CatalogRequest) => MaybePromise<CatalogResponse>
   search: (request: SearchRequest) => MaybePromise<CatalogResponse>
   anime: (id: string) => MaybePromise<AnimeMetadata>
+  manga?: (id: string) => MaybePromise<AnimeMetadata>
   recommendations?: (request: RecommendationRequest) => MaybePromise<RecommendationResponse>
   videos?: (request: VideoSourceRequest) => MaybePromise<VideoSourceResponse>
 }
@@ -56,6 +57,11 @@ export function createTypenxAddon(options: {
       if (request.method === 'GET' && path.startsWith('/anime/')) {
         const id = decodeURIComponent(path.slice('/anime/'.length))
         return json(options.handlers.anime(id))
+      }
+
+      if (request.method === 'GET' && path.startsWith('/manga/')) {
+        const id = decodeURIComponent(path.slice('/manga/'.length))
+        return json((options.handlers.manga ?? options.handlers.anime)(id))
       }
 
       if (request.method === 'POST' && path === '/recommendations') {

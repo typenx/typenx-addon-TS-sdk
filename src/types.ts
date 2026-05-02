@@ -6,7 +6,16 @@ export type AddonResource =
   | 'video_sources'
   | 'recommendations'
 
-export type ContentType = 'anime' | 'movie' | 'ova' | 'ona' | 'special'
+export type ContentType =
+  | 'anime'
+  | 'manga'
+  | 'manhwa'
+  | 'manhua'
+  | 'light_novel'
+  | 'movie'
+  | 'ova'
+  | 'ona'
+  | 'special'
 
 export type AddonManifest = {
   id: string
@@ -34,6 +43,7 @@ export type CatalogFilter = {
 export type CatalogRequest = {
   addon_id?: string
   catalog_id: string
+  content_type?: ContentType
   skip?: number
   limit?: number
   query?: string
@@ -42,6 +52,7 @@ export type CatalogRequest = {
 export type SearchRequest = {
   addon_id?: string
   query: string
+  content_type?: ContentType
   limit?: number
 }
 
