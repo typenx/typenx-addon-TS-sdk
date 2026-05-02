@@ -27,4 +27,9 @@ export type {
   ExternalLink,
   SearchRequest,
   StaffCredit,
+  VideoHeader,
+  VideoSourceRequest,
+  VideoSourceResponse,
+  VideoStream,
+  VideoSubtitle,
 } from './types.js'

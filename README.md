@@ -1,8 +1,8 @@
 # Typenx Addon TypeScript SDK
 
-TypeScript SDK for building Typenx metadata addons.
+TypeScript SDK for building Typenx addons.
 
-Typenx addons are remote HTTP services. They provide catalog, search, and anime metadata only. They do not return stream URLs or host media.
+Typenx addons are remote HTTP services. Metadata addons provide catalog, search, and anime metadata. Video addons can also opt into `video_sources` and return episode stream URLs.
 
 ```ts
 import { createTypenxAddon, serveTypenxAddon } from '@typenx/addon-ts-sdk'
@@ -24,7 +24,7 @@ const addon = createTypenxAddon({
     version: '0.1.0',
     description: 'Metadata addon backed by my anime catalog service.',
     icon: 'https://typenx.dev/addon-icon.png',
-    resources: ['catalog', 'search', 'anime_meta'],
+    resources: ['catalog', 'search', 'anime_meta', 'video_sources'],
     catalogs: [{ id: 'popular', name: 'Popular', content_type: 'anime', filters: [] }],
   },
   handlers: {
@@ -69,6 +69,20 @@ const addon = createTypenxAddon({
       episodes: [],
       updated_at: new Date().toISOString(),
     }),
+    videos: async (request) => ({
+      streams: [
+        {
+          id: `${request.anime_id}-${request.episode_number ?? request.episode_id}-720p`,
+          title: '720p',
+          url: 'https://cdn.example/anime/episode-1.mp4',
+          quality: '720p',
+          format: 'mp4',
+          audio_language: 'ja',
+          headers: [],
+        },
+      ],
+      subtitles: [],
+    }),
   },
 })
 
@@ -82,3 +96,4 @@ Routes exposed by the SDK:
 - `POST /catalog`
 - `POST /search`
 - `GET /anime/:id`
+- `POST /videos`

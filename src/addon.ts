@@ -5,6 +5,8 @@ import type {
   CatalogRequest,
   CatalogResponse,
   SearchRequest,
+  VideoSourceRequest,
+  VideoSourceResponse,
 } from './types.js'
 
 export type TypenxAddonHandlers = {
@@ -12,6 +14,7 @@ export type TypenxAddonHandlers = {
   catalog: (request: CatalogRequest) => MaybePromise<CatalogResponse>
   search: (request: SearchRequest) => MaybePromise<CatalogResponse>
   anime: (id: string) => MaybePromise<AnimeMetadata>
+  videos?: (request: VideoSourceRequest) => MaybePromise<VideoSourceResponse>
 }
 
 export type TypenxAddon = {
@@ -50,6 +53,13 @@ export function createTypenxAddon(options: {
       if (request.method === 'GET' && path.startsWith('/anime/')) {
         const id = decodeURIComponent(path.slice('/anime/'.length))
         return json(options.handlers.anime(id))
+      }
+
+      if (request.method === 'POST' && path === '/videos') {
+        if (!options.handlers.videos) {
+          return json({ message: 'Video sources are not supported' }, 404)
+        }
+        return json(options.handlers.videos(await readJson<VideoSourceRequest>(request)))
       }
 
       return json({ message: 'Not found' }, 404)

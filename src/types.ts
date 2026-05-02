@@ -1,4 +1,9 @@
-export type AddonResource = 'catalog' | 'search' | 'anime_meta' | 'episode_meta'
+export type AddonResource =
+  | 'catalog'
+  | 'search'
+  | 'anime_meta'
+  | 'episode_meta'
+  | 'video_sources'
 
 export type ContentType = 'anime' | 'movie' | 'ova' | 'ona' | 'special'
 
@@ -39,8 +44,53 @@ export type SearchRequest = {
   limit?: number
 }
 
+export type VideoSourceRequest = {
+  addon_id?: string
+  anime_id: string
+  episode_id?: string | null
+  episode_number?: number | null
+  season_number?: number | null
+}
+
+export type VideoSourceResponse = {
+  streams: VideoStream[]
+  subtitles?: VideoSubtitle[]
+}
+
+export type VideoStream = {
+  id: string
+  title?: string | null
+  url: string
+  quality?: string | null
+  format?: string | null
+  audio_language?: string | null
+  headers: VideoHeader[]
+}
+
+export type VideoHeader = {
+  name: string
+  value: string
+}
+
+export type VideoSubtitle = {
+  id: string
+  label: string
+  language?: string | null
+  url: string
+  format?: string | null
+}
+
 export type CatalogResponse = {
   items: AnimePreview[]
+}
+
+export type SeasonEntry = {
+  id: string
+  title: string
+  season_number: number | null
+  year: number | null
+  episode_count: number | null
+  source?: string | null
 }
 
 export type AnimePreview = {
@@ -52,6 +102,8 @@ export type AnimePreview = {
   score?: number | null
   year: number | null
   content_type: ContentType
+  genres?: string[]
+  season_entries?: SeasonEntry[]
 }
 
 export type AnimeMetadata = {
